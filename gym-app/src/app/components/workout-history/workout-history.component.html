@@ -1,0 +1,74 @@
+<div class="workout-history">
+  <div class="header">
+    <h2>📊 Workout History</h2>
+  </div>
+
+  <div *ngIf="workouts.length === 0" class="no-workouts">
+    <p>No workouts recorded yet. Start your first workout to see your progress here!</p>
+  </div>
+
+  <div *ngIf="workouts.length > 0" class="history-container">
+    <div class="workout-list">
+      <div 
+        *ngFor="let workout of workouts" 
+        class="workout-card"
+        [class.selected]="selectedWorkout?.id === workout.id"
+        (click)="selectWorkout(workout)">
+        
+        <div class="workout-summary">
+          <div class="workout-info">
+            <h3>{{ workout.name }}</h3>
+            <p class="workout-date">{{ workout.date | date:'medium' }}</p>
+            <div class="workout-stats">
+              <span class="stat">
+                <strong>{{ workout.exercises.length }}</strong> exercises
+              </span>
+              <span class="stat">
+                <strong>{{ getCompletedSets(workout) }}/{{ getTotalSets(workout) }}</strong> sets
+              </span>
+              <span class="stat">
+                <strong>{{ getTotalWeight(workout) }}</strong> kg total
+              </span>
+            </div>
+          </div>
+          <div class="workout-actions">
+            <button 
+              class="btn-delete" 
+              (click)="deleteWorkout(workout); $event.stopPropagation()">
+              🗑️
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="selectedWorkout?.id === workout.id" class="workout-details">
+          <div class="exercises-list">
+            <div *ngFor="let workoutExercise of workout.exercises" class="exercise-detail">
+              <div class="exercise-title">
+                <span class="equipment-icon">{{ getEquipmentIcon(workoutExercise.exercise.equipmentType || 'other') }}</span>
+                <h4>{{ workoutExercise.exercise.name }}</h4>
+                <span class="equipment-type">{{ workoutExercise.exercise.equipmentType | titlecase }}</span>
+              </div>
+              <div class="sets-grid">
+                <div class="sets-header">
+                  <span>Set</span>
+                  <span>Weight</span>
+                  <span>Reps</span>
+                  <span>Status</span>
+                </div>
+                <div 
+                  *ngFor="let set of workoutExercise.sets; let i = index" 
+                  class="set-detail"
+                  [class.completed]="set.completed">
+                  <span>{{ i + 1 }}</span>
+                  <span>{{ set.weight }} kg</span>
+                  <span>{{ set.reps }}</span>
+                  <span class="status">{{ set.completed ? '✅' : '❌' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

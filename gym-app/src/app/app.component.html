@@ -1,0 +1,26 @@
+<div class="app-container">
+  <nav class="app-nav">
+    <div class="nav-brand">
+      <h1>💪 Gym Tracker</h1>
+    </div>
+    <div class="nav-tabs">
+      <button 
+        class="nav-tab" 
+        [class.active]="activeTab === 'tracker'"
+        (click)="setActiveTab('tracker')">
+        Workout
+      </button>
+      <button 
+        class="nav-tab" 
+        [class.active]="activeTab === 'history'"
+        (click)="setActiveTab('history')">
+        History
+      </button>
+    </div>
+  </nav>
+
+  <main class="app-main">
+    <app-workout-tracker *ngIf="activeTab === 'tracker'"></app-workout-tracker>
+    <app-workout-history *ngIf="activeTab === 'history'"></app-workout-history>
+  </main>
+</div>

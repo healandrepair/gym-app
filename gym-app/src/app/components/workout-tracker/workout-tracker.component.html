@@ -1,0 +1,117 @@
+<div class="workout-tracker">
+  <div class="header">
+    <h1>💪 Gym Tracker</h1>
+  </div>
+
+  <div *ngIf="!isWorkoutActive" class="start-workout">
+    <button class="btn-primary" (click)="startWorkout()">Start New Workout</button>
+  </div>
+
+  <div *ngIf="isWorkoutActive" class="active-workout">
+    <div class="workout-header">
+      <h2>{{ currentWorkout.name }}</h2>
+      <div class="workout-actions">
+        <button class="btn-success" (click)="saveWorkout()">Save Workout</button>
+        <button class="btn-danger" (click)="finishWorkout()">Cancel</button>
+      </div>
+    </div>
+
+    <div class="exercise-selector">
+      <h3>Add Exercise</h3>
+      
+      <!-- Body Part Selection -->
+      <div class="body-part-selection">
+        <h4>Select Body Part</h4>
+        <div class="body-part-grid">
+          <button 
+            *ngFor="let bodyPart of bodyParts"
+            class="body-part-btn"
+            [class.active]="selectedBodyPart === bodyPart"
+            (click)="selectBodyPart(bodyPart)">
+            {{ bodyPart }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Equipment Type Selection -->
+      <div class="equipment-selection" *ngIf="selectedBodyPart">
+        <h4>Equipment Type</h4>
+        <div class="equipment-grid">
+          <button 
+            *ngFor="let equipmentType of equipmentTypes"
+            class="equipment-btn"
+            [class.active]="selectedEquipmentType === equipmentType"
+            (click)="selectEquipmentType(equipmentType)">
+            <span class="equipment-icon">{{ getEquipmentIcon(equipmentType) }}</span>
+            <span class="equipment-name">{{ equipmentType | titlecase }}</span>
+          </button>
+        </div>
+        <button class="clear-filter-btn" (click)="clearFilters()">Show All Exercises</button>
+      </div>
+
+      <!-- Exercise List -->
+      <div class="exercise-list" *ngIf="selectedBodyPart">
+        <h4>
+          Exercises 
+          <span *ngIf="selectedEquipmentType">({{ selectedEquipmentType | titlecase }})</span>
+        </h4>
+        <div class="exercise-grid">
+          <button 
+            *ngFor="let exercise of getFilteredExercises()" 
+            class="exercise-card"
+            (click)="addExerciseToWorkout(exercise)">
+            <div class="exercise-header">
+              <span class="equipment-icon">{{ getEquipmentIcon(exercise.equipmentType || 'other') }}</span>
+              <div class="exercise-name">{{ exercise.name }}</div>
+            </div>
+            <div class="exercise-details">
+              <span class="exercise-category">{{ exercise.category }}</span>
+              <span class="exercise-equipment">{{ exercise.equipmentType | titlecase }}</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="current-exercises" *ngIf="currentWorkout.exercises.length > 0">
+      <h3>Current Workout</h3>
+      <div *ngFor="let workoutExercise of currentWorkout.exercises; let exerciseIndex = index" class="exercise-section">
+        <div class="exercise-header">
+          <h4>{{ workoutExercise.exercise.name }}</h4>
+          <button class="btn-remove" (click)="removeExercise(exerciseIndex)">×</button>
+        </div>
+
+        <div class="sets-container">
+          <div class="sets-header">
+            <span>Set</span>
+            <span>Weight (kg)</span>
+            <span>Reps</span>
+            <span>Done</span>
+            <span>Action</span>
+          </div>
+
+          <div *ngFor="let set of workoutExercise.sets; let setIndex = index" class="set-row">
+            <span class="set-number">{{ setIndex + 1 }}</span>
+            <input 
+              type="number" 
+              [(ngModel)]="set.weight" 
+              placeholder="0"
+              class="weight-input">
+            <input 
+              type="number" 
+              [(ngModel)]="set.reps" 
+              placeholder="0"
+              class="reps-input">
+            <input 
+              type="checkbox" 
+              [(ngModel)]="set.completed"
+              class="completed-checkbox">
+            <button class="btn-remove-set" (click)="removeSet(exerciseIndex, setIndex)">Remove</button>
+          </div>
+        </div>
+
+        <button class="btn-add-set" (click)="addSet(exerciseIndex)">+ Add Set</button>
+      </div>
+    </div>
+  </div>
+</div>
