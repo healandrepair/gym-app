@@ -49,6 +49,23 @@
         <button class="clear-filter-btn" (click)="clearFilters()">Show All Exercises</button>
       </div>
 
+      <!-- Custom Exercise Section -->
+      <div class="custom-exercise-section">
+        <button 
+          class="btn-custom-exercise"
+          *ngIf="!showCustomExerciseForm"
+          (click)="showCreateCustomExercise()">
+          ➕ Create Custom Exercise
+        </button>
+        
+        <div class="custom-exercise-form-container" *ngIf="showCustomExerciseForm">
+          <app-custom-exercise-form
+            (exerciseCreated)="onCustomExerciseCreated($event)"
+            (cancelled)="onCustomExerciseFormCancelled()">
+          </app-custom-exercise-form>
+        </div>
+      </div>
+
       <!-- Exercise List -->
       <div class="exercise-list" *ngIf="selectedBodyPart">
         <h4>

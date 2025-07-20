@@ -30,6 +30,8 @@
   font-size: 0.9rem;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+  position: relative;
+  z-index: 1;
 }
 
 .btn-add-today:hover {
@@ -100,91 +102,6 @@
   color: #2c3e50;
 }
 
-.workout-actions {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.btn-edit, .btn-delete, .btn-copy, .btn-rename {
-  background: none;
-  border: none;
-  padding: 8px;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: background-color 0.2s;
-  font-size: 1.2rem;
-}
-
-.btn-edit:hover {
-  background-color: #d1ecf1;
-}
-
-.btn-delete:hover {
-  background-color: #f8d7da;
-}
-
-.btn-copy:hover {
-  background-color: #e2e3e5;
-}
-
-.btn-rename:hover {
-  background-color: #fff3cd;
-}
-
-.edit-actions, .rename-actions {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.rename-input {
-  padding: 6px 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 0.85rem;
-  min-width: 150px;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.rename-input:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
-}
-
-.btn-save, .btn-cancel {
-  background: none;
-  border: 1px solid #ddd;
-  padding: 6px 12px;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: all 0.2s;
-  font-size: 0.85rem;
-  font-weight: 500;
-}
-
-.btn-save {
-  background: #28a745;
-  color: white;
-  border-color: #28a745;
-}
-
-.btn-save:hover {
-  background: #218838;
-  border-color: #218838;
-}
-
-.btn-cancel {
-  background: #6c757d;
-  color: white;
-  border-color: #6c757d;
-}
-
-.btn-cancel:hover {
-  background: #5a6268;
-  border-color: #5a6268;
-}
 
 .workout-details {
   border-top: 1px solid #e9ecef;
@@ -559,15 +476,6 @@
     gap: 15px;
   }
   
-  .workout-actions {
-    flex-wrap: wrap;
-    gap: 5px;
-  }
-  
-  .rename-input {
-    min-width: 120px;
-    font-size: 0.8rem;
-  }
   
   .workout-stats {
     gap: 10px;
@@ -588,16 +496,6 @@
     padding: 15px;
   }
   
-  .edit-actions, .rename-actions {
-    flex-direction: column;
-    gap: 5px;
-    width: 100%;
-  }
-  
-  .btn-save, .btn-cancel {
-    width: 100%;
-    padding: 8px 12px;
-  }
   
   .sets-header, .set-row {
     grid-template-columns: 30px 80px 80px 50px 70px;
@@ -658,4 +556,35 @@
   .exercise-category, .exercise-equipment {
     font-size: 0.7rem;
   }
+}
+
+/* Custom Exercise Styles */
+.custom-exercise-section {
+  margin: 20px 0;
+  padding: 20px 0;
+  border-top: 1px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.btn-custom-exercise {
+  background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(23, 162, 184, 0.3);
+  width: 100%;
+}
+
+.btn-custom-exercise:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(23, 162, 184, 0.4);
+}
+
+.custom-exercise-form-container {
+  margin-top: 20px;
 }

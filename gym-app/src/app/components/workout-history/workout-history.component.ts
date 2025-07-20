@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { StorageService } from '../../services/storage.service';
 import { Workout, Exercise, WorkoutExercise, Set } from '../../models/exercise.model';
+import { WorkoutActionsComponent } from '../workout-actions/workout-actions.component';
+import { CustomExerciseFormComponent } from '../custom-exercise-form/custom-exercise-form.component';
 
 @Component({
   selector: 'app-workout-history',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, WorkoutActionsComponent, CustomExerciseFormComponent],
   templateUrl: './workout-history.component.html',
   styleUrls: ['./workout-history.component.css']
 })
@@ -27,6 +29,9 @@ export class WorkoutHistoryComponent implements OnInit {
   // Rename functionality
   renamingWorkoutId: string | null = null;
   renameWorkoutName: string = '';
+  
+  // Custom exercise form
+  showCustomExerciseForm: boolean = false;
 
   constructor(private storageService: StorageService) {}
 
@@ -215,7 +220,7 @@ export class WorkoutHistoryComponent implements OnInit {
   }
 
   // Copy workout functionality
-  copyWorkout(workout: Workout): void {
+  onCopyWorkout(workout: Workout): void {
     const shouldCopyToToday = confirm('Copy this workout to today? Click OK for today, Cancel to copy with original date.');
     if (shouldCopyToToday) {
       this.storageService.copyWorkout(workout.id);
@@ -231,7 +236,7 @@ export class WorkoutHistoryComponent implements OnInit {
   }
 
   // Rename workout functionality
-  startRenamingWorkout(workout: Workout): void {
+  onStartRenaming(workout: Workout): void {
     this.renamingWorkoutId = workout.id;
     this.renameWorkoutName = workout.name;
   }
@@ -240,15 +245,53 @@ export class WorkoutHistoryComponent implements OnInit {
     return this.renamingWorkoutId === workoutId;
   }
 
-  saveWorkoutRename(workout: Workout): void {
-    if (this.renameWorkoutName.trim()) {
-      this.storageService.renameWorkout(workout.id, this.renameWorkoutName.trim());
-    }
-    this.cancelWorkoutRename();
+  onSaveRename(data: {workout: Workout, newName: string}): void {
+    this.storageService.renameWorkout(data.workout.id, data.newName);
+    this.onCancelRename();
   }
 
-  cancelWorkoutRename(): void {
+  onCancelRename(): void {
     this.renamingWorkoutId = null;
     this.renameWorkoutName = '';
+  }
+
+  // Edit workout functionality  
+  onStartEditing(workout: Workout): void {
+    this.startEditingWorkout(workout);
+  }
+
+  onSaveEditing(): void {
+    this.saveEditedWorkout();
+  }
+
+  onCancelEditing(): void {
+    this.cancelEditingWorkout();
+  }
+
+  onDeleteWorkout(workout: Workout): void {
+    this.deleteWorkout(workout);
+  }
+
+  // Custom exercise methods
+  showCreateCustomExercise(): void {
+    this.showCustomExerciseForm = true;
+  }
+
+  onCustomExerciseCreated(exercise: Exercise): void {
+    // Use the storage service's generateExerciseId method
+    exercise.id = this.storageService.generateExerciseId();
+    
+    // Add the exercise to storage
+    this.storageService.addExercise(exercise);
+    
+    // Add it to the editing workout
+    this.addExerciseToEditingWorkout(exercise);
+    
+    // Hide the form
+    this.showCustomExerciseForm = false;
+  }
+
+  onCustomExerciseFormCancelled(): void {
+    this.showCustomExerciseForm = false;
   }
 }

@@ -141,8 +141,14 @@ export class StorageService {
     return 'set_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
   }
 
+  generateExerciseId(): string {
+    return 'exercise_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+  }
+
   private generateWorkoutName(date: Date, exercises?: any[]): string {
+    const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'long' });
     const dateStr = date.toLocaleDateString();
+    const dayAndDate = `${dayOfWeek}, ${dateStr}`;
     
     if (exercises && exercises.length > 0) {
       const bodyParts = exercises
@@ -151,11 +157,11 @@ export class StorageService {
         .slice(0, 2);
       
       if (bodyParts.length > 0) {
-        return `${dateStr} - ${bodyParts.join(' + ')}`;
+        return `${dayAndDate} - ${bodyParts.join(' + ')}`;
       }
     }
     
-    return `Workout ${dateStr}`;
+    return `${dayAndDate} Workout`;
   }
 
   addExercise(exercise: Exercise): void {

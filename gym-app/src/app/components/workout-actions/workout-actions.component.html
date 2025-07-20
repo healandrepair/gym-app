@@ -1,0 +1,59 @@
+<div class="workout-actions">
+  <button 
+    class="btn-copy" 
+    *ngIf="!isEditing"
+    (click)="onCopyWorkout($event)"
+    title="Copy workout">
+    📋
+  </button>
+  <button 
+    class="btn-rename" 
+    *ngIf="!isEditing && !isRenaming"
+    (click)="onStartRenaming($event)"
+    title="Rename workout">
+    🏷️
+  </button>
+  <button 
+    class="btn-edit" 
+    *ngIf="!isEditing"
+    (click)="onStartEditing($event)">
+    ✏️
+  </button>
+  <button 
+    class="btn-delete" 
+    *ngIf="!isEditing"
+    (click)="onDeleteWorkout($event)">
+    🗑️
+  </button>
+  <div class="edit-actions" *ngIf="isEditing">
+    <button 
+      class="btn-save" 
+      (click)="onSaveEditing($event)">
+      💾 Save
+    </button>
+    <button 
+      class="btn-cancel" 
+      (click)="onCancelEditing($event)">
+      ❌ Cancel
+    </button>
+  </div>
+  <div class="rename-actions" *ngIf="isRenaming">
+    <input 
+      type="text" 
+      [(ngModel)]="renameWorkoutName"
+      (click)="onRenameInputClick($event)"
+      (keyup)="onRenameKeyUp($event)"
+      placeholder="Enter new name"
+      class="rename-input">
+    <button 
+      class="btn-save" 
+      (click)="onSaveRename($event)">
+      ✅
+    </button>
+    <button 
+      class="btn-cancel" 
+      (click)="onCancelRename($event)">
+      ❌
+    </button>
+  </div>
+</div>

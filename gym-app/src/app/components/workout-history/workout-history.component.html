@@ -34,66 +34,19 @@
               </span>
             </div>
           </div>
-          <div class="workout-actions">
-            <button 
-              class="btn-copy" 
-              *ngIf="!isEditingWorkout(workout.id)"
-              (click)="copyWorkout(workout); $event.stopPropagation()"
-              title="Copy workout">
-              📋
-            </button>
-            <button 
-              class="btn-rename" 
-              *ngIf="!isEditingWorkout(workout.id) && !isRenamingWorkout(workout.id)"
-              (click)="startRenamingWorkout(workout); $event.stopPropagation()"
-              title="Rename workout">
-              🏷️
-            </button>
-            <button 
-              class="btn-edit" 
-              *ngIf="!isEditingWorkout(workout.id)"
-              (click)="startEditingWorkout(workout); $event.stopPropagation()">
-              ✏️
-            </button>
-            <button 
-              class="btn-delete" 
-              *ngIf="!isEditingWorkout(workout.id)"
-              (click)="deleteWorkout(workout); $event.stopPropagation()">
-              🗑️
-            </button>
-            <div class="edit-actions" *ngIf="isEditingWorkout(workout.id)">
-              <button 
-                class="btn-save" 
-                (click)="saveEditedWorkout(); $event.stopPropagation()">
-                💾 Save
-              </button>
-              <button 
-                class="btn-cancel" 
-                (click)="cancelEditingWorkout(); $event.stopPropagation()">
-                ❌ Cancel
-              </button>
-            </div>
-            <div class="rename-actions" *ngIf="isRenamingWorkout(workout.id)">
-              <input 
-                type="text" 
-                [(ngModel)]="renameWorkoutName"
-                (click)="$event.stopPropagation()"
-                (keyup.enter)="saveWorkoutRename(workout)"
-                (keyup.escape)="cancelWorkoutRename()"
-                placeholder="Enter new name"
-                class="rename-input">
-              <button 
-                class="btn-save" 
-                (click)="saveWorkoutRename(workout); $event.stopPropagation()">
-                ✅
-              </button>
-              <button 
-                class="btn-cancel" 
-                (click)="cancelWorkoutRename(); $event.stopPropagation()">
-                ❌
-              </button>
-            </div>
-          </div>
+          <app-workout-actions 
+            [workout]="workout"
+            [isEditing]="isEditingWorkout(workout.id)"
+            [isRenaming]="isRenamingWorkout(workout.id)"
+            (copyWorkout)="onCopyWorkout($event)"
+            (startRenaming)="onStartRenaming($event)"
+            (startEditing)="onStartEditing($event)"
+            (deleteWorkout)="onDeleteWorkout($event)"
+            (saveEditing)="onSaveEditing()"
+            (cancelEditing)="onCancelEditing()"
+            (saveRename)="onSaveRename($event)"
+            (cancelRename)="onCancelRename()">
+          </app-workout-actions>
         </div>
 
         <!-- View Mode -->
@@ -208,6 +161,23 @@
                 </button>
               </div>
               <button class="clear-filter-btn" (click)="clearFilters()">Show All Exercises</button>
+            </div>
+
+            <!-- Custom Exercise Section -->
+            <div class="custom-exercise-section">
+              <button 
+                class="btn-custom-exercise"
+                *ngIf="!showCustomExerciseForm"
+                (click)="showCreateCustomExercise()">
+                ➕ Create Custom Exercise
+              </button>
+              
+              <div class="custom-exercise-form-container" *ngIf="showCustomExerciseForm">
+                <app-custom-exercise-form
+                  (exerciseCreated)="onCustomExerciseCreated($event)"
+                  (cancelled)="onCustomExerciseFormCancelled()">
+                </app-custom-exercise-form>
+              </div>
             </div>
 
             <!-- Exercise List -->

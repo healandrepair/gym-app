@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { StorageService } from '../../services/storage.service';
 import { Exercise, Workout, WorkoutExercise, Set } from '../../models/exercise.model';
+import { CustomExerciseFormComponent } from '../custom-exercise-form/custom-exercise-form.component';
 
 @Component({
   selector: 'app-workout-tracker',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CustomExerciseFormComponent],
   templateUrl: './workout-tracker.component.html',
   styleUrls: ['./workout-tracker.component.css']
 })
@@ -23,6 +24,9 @@ export class WorkoutTrackerComponent implements OnInit {
   bodyParts: string[] = ['Chest', 'Shoulders', 'Back', 'Biceps', 'Triceps', 'Legs'];
   equipmentTypes: string[] = ['barbell', 'dumbbell', 'machine', 'bodyweight', 'cable', 'other'];
   
+  // Custom exercise form
+  showCustomExerciseForm: boolean = false;
+  
   constructor(private storageService: StorageService) {}
 
   ngOnInit(): void {
@@ -32,10 +36,14 @@ export class WorkoutTrackerComponent implements OnInit {
   }
 
   createNewWorkout(): Workout {
+    const now = new Date();
+    const dayOfWeek = now.toLocaleDateString('en-US', { weekday: 'long' });
+    const dateStr = now.toLocaleDateString();
+    
     return {
       id: this.generateId(),
-      date: new Date(),
-      name: `Workout ${new Date().toLocaleDateString()}`,
+      date: now,
+      name: `${dayOfWeek}, ${dateStr} Workout`,
       exercises: [],
       duration: 0
     };
@@ -131,5 +139,28 @@ export class WorkoutTrackerComponent implements OnInit {
       'other': '🏃'
     };
     return icons[equipmentType] || '💪';
+  }
+
+  // Custom exercise methods
+  showCreateCustomExercise(): void {
+    this.showCustomExerciseForm = true;
+  }
+
+  onCustomExerciseCreated(exercise: Exercise): void {
+    // Use the storage service's generateExerciseId method
+    exercise.id = this.storageService.generateExerciseId();
+    
+    // Add the exercise to storage
+    this.storageService.addExercise(exercise);
+    
+    // Add it to the current workout
+    this.addExerciseToWorkout(exercise);
+    
+    // Hide the form
+    this.showCustomExerciseForm = false;
+  }
+
+  onCustomExerciseFormCancelled(): void {
+    this.showCustomExerciseForm = false;
   }
 }
