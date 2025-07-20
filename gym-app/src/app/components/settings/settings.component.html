@@ -1,0 +1,101 @@
+<div class="settings">
+  <div class="header">
+    <h2>⚙️ Settings</h2>
+  </div>
+
+  <div class="settings-container">
+    <!-- App Statistics -->
+    <div class="settings-section">
+      <h3>📊 App Statistics</h3>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">{{ exerciseCount }}</div>
+          <div class="stat-label">Exercises Available</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">{{ workoutCount }}</div>
+          <div class="stat-label">Workouts Recorded</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exercise Management -->
+    <div class="settings-section">
+      <h3>💪 Exercise Management</h3>
+      <div class="setting-item">
+        <div class="setting-info">
+          <h4>Refresh Default Exercises</h4>
+          <p>Reset the exercise database to the latest default exercises. This will not affect your workout history.</p>
+        </div>
+        <div class="setting-actions">
+          <button 
+            class="btn-refresh" 
+            *ngIf="!showConfirmRefresh"
+            (click)="confirmRefreshExercises()">
+            🔄 Refresh Exercises
+          </button>
+          <div class="confirm-actions" *ngIf="showConfirmRefresh">
+            <p class="confirm-text">Are you sure? This will replace all exercises with the latest defaults.</p>
+            <div class="confirm-buttons">
+              <button class="btn-confirm" (click)="refreshDefaultExercises()">
+                ✅ Confirm
+              </button>
+              <button class="btn-cancel" (click)="cancelRefreshExercises()">
+                ❌ Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Management -->
+    <div class="settings-section danger-section">
+      <h3>🗑️ Data Management</h3>
+      <div class="setting-item">
+        <div class="setting-info">
+          <h4>Clear All Data</h4>
+          <p>⚠️ This will permanently delete all workouts and reset exercises. This action cannot be undone!</p>
+        </div>
+        <div class="setting-actions">
+          <button 
+            class="btn-danger" 
+            *ngIf="!showConfirmClear"
+            (click)="confirmClearAllData()">
+            🗑️ Clear All Data
+          </button>
+          <div class="confirm-actions" *ngIf="showConfirmClear">
+            <p class="confirm-text danger-text">⚠️ This will permanently delete ALL your data. Are you absolutely sure?</p>
+            <div class="confirm-buttons">
+              <button class="btn-confirm-danger" (click)="clearAllData()">
+                💥 Delete Everything
+              </button>
+              <button class="btn-cancel" (click)="cancelClearAllData()">
+                ❌ Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- App Information -->
+    <div class="settings-section">
+      <h3>ℹ️ App Information</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <strong>Version:</strong> 1.0.0
+        </div>
+        <div class="info-item">
+          <strong>Storage:</strong> Local Browser Storage
+        </div>
+        <div class="info-item">
+          <strong>Platform:</strong> Web & Mobile
+        </div>
+        <div class="info-item">
+          <strong>Framework:</strong> Angular {{ getAngularVersion() }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

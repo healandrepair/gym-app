@@ -82,6 +82,82 @@ export class StorageService {
     this.saveWorkouts(filteredWorkouts);
   }
 
+  copyWorkout(workoutId: string, newDate?: Date): void {
+    const currentWorkouts = this.workoutsSubject.value;
+    const workoutToCopy = currentWorkouts.find(w => w.id === workoutId);
+    
+    if (workoutToCopy) {
+      const targetDate = newDate || new Date();
+      const copiedWorkout: Workout = {
+        id: this.generateWorkoutId(),
+        name: this.generateWorkoutName(targetDate, workoutToCopy.exercises),
+        date: targetDate,
+        exercises: workoutToCopy.exercises.map(exercise => ({
+          ...exercise,
+          sets: exercise.sets.map(set => ({
+            ...set,
+            id: this.generateSetId(),
+            completed: false
+          }))
+        })),
+        duration: 0,
+        notes: ''
+      };
+      
+      this.addWorkout(copiedWorkout);
+    }
+  }
+
+  renameWorkout(workoutId: string, newName: string): void {
+    const currentWorkouts = this.workoutsSubject.value;
+    const workoutIndex = currentWorkouts.findIndex(w => w.id === workoutId);
+    
+    if (workoutIndex !== -1) {
+      currentWorkouts[workoutIndex].name = newName;
+      this.saveWorkouts(currentWorkouts);
+    }
+  }
+
+  createTodaysWorkout(): Workout {
+    const today = new Date();
+    const newWorkout: Workout = {
+      id: this.generateWorkoutId(),
+      name: this.generateWorkoutName(today),
+      date: today,
+      exercises: [],
+      duration: 0,
+      notes: ''
+    };
+    
+    this.addWorkout(newWorkout);
+    return newWorkout;
+  }
+
+  private generateWorkoutId(): string {
+    return 'workout_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+  }
+
+  private generateSetId(): string {
+    return 'set_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+  }
+
+  private generateWorkoutName(date: Date, exercises?: any[]): string {
+    const dateStr = date.toLocaleDateString();
+    
+    if (exercises && exercises.length > 0) {
+      const bodyParts = exercises
+        .map(ex => ex.exercise?.category)
+        .filter((category, index, arr) => arr.indexOf(category) === index)
+        .slice(0, 2);
+      
+      if (bodyParts.length > 0) {
+        return `${dateStr} - ${bodyParts.join(' + ')}`;
+      }
+    }
+    
+    return `Workout ${dateStr}`;
+  }
+
   addExercise(exercise: Exercise): void {
     const currentExercises = this.exercisesSubject.value;
     currentExercises.push(exercise);
@@ -174,5 +250,36 @@ export class StorageService {
 
   getWorkoutHistory(): WorkoutHistory {
     return { workouts: this.workoutsSubject.value };
+  }
+
+  refreshDefaultExercises(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      // Clear existing exercises from localStorage
+      localStorage.removeItem(this.EXERCISES_KEY);
+      
+      // Reset the subject to empty array
+      this.exercisesSubject.next([]);
+      
+      // Reinitialize with fresh default exercises
+      this.initializeDefaultExercises();
+    }
+  }
+
+  clearAllData(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem(this.WORKOUTS_KEY);
+      localStorage.removeItem(this.EXERCISES_KEY);
+      this.workoutsSubject.next([]);
+      this.exercisesSubject.next([]);
+      this.initializeDefaultExercises();
+    }
+  }
+
+  getExerciseCount(): number {
+    return this.exercisesSubject.value.length;
+  }
+
+  getWorkoutCount(): number {
+    return this.workoutsSubject.value.length;
   }
 }

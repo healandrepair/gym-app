@@ -16,11 +16,18 @@
         (click)="setActiveTab('history')">
         History
       </button>
+      <button 
+        class="nav-tab" 
+        [class.active]="activeTab === 'settings'"
+        (click)="setActiveTab('settings')">
+        Settings
+      </button>
     </div>
   </nav>
 
   <main class="app-main">
     <app-workout-tracker *ngIf="activeTab === 'tracker'"></app-workout-tracker>
     <app-workout-history *ngIf="activeTab === 'history'"></app-workout-history>
+    <app-settings *ngIf="activeTab === 'settings'"></app-settings>
   </main>
 </div>
