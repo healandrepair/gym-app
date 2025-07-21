@@ -3,7 +3,7 @@ export default `<!doctype html>
 <head>
   <meta charset="utf-8">
   <title>Gym Tracker - Track Your Fitness Progress</title>
-  <base href="/">
+  <base href="/gym-app/">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <meta name="description" content="Track your gym workouts, exercises, sets, and reps. Monitor your fitness progress with local storage.">
   <meta name="theme-color" content="#667eea">

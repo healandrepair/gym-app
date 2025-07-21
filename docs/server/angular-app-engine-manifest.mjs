@@ -1,6 +1,6 @@
 
 export default {
-  basePath: '/',
+  basePath: '/gym-app',
   supportedLocales: {
   "en-US": ""
 },
