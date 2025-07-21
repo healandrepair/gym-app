@@ -6,6 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "build:github": "ng build --base-href=/gym-app/",
+    "build:docs": "ng build --base-href=/gym-app/docs/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:gym-app": "node dist/gym-app/server/server.mjs"
